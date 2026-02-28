@@ -16,7 +16,8 @@ class LocationRepo(
         return Coordinate(
             latitude = rawLocation.latitude,
             longitude = rawLocation.longitude,
-            bearing = if (rawLocation.hasBearing()) rawLocation.bearing else null
+            bearing = if (rawLocation.hasBearing()) rawLocation.bearing else null,
+            provider = rawLocation.provider
         )
     }
 
@@ -25,12 +26,31 @@ class LocationRepo(
         provider: String = LocationManager.GPS_PROVIDER,
         onLocationUpdate: ((Coordinate) -> Unit)
     ) {
-        val rawLocation = source.requestSingleLocationUpdate(provider) { location ->
+        source.requestSingleLocationUpdate(provider) { location ->
             onLocationUpdate(Coordinate(
                 location.latitude,
                 location.longitude,
-                location.bearing
+                location.bearing,
+                location.provider
             ))
         }
     }
+
+    @RequiresPermission(anyOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
+    fun requestLiveLocationUpdates(
+        provider: String = LocationManager.GPS_PROVIDER,
+        minTimeMs: Long = 1000L,
+        minDistanceM: Float = 0.0f,
+        onLocationUpdate: (Coordinate) -> Unit
+    ) {
+        source.requestLiveLocationUpdates(
+            provider,
+            minTimeMs,
+            minDistanceM,
+        ) { location ->
+            onLocationUpdate(Coordinate(latitude = location.latitude, longitude = location.longitude, bearing = location.bearing, provider = location.provider))
+        }
+    }
+
+    fun cancelLiveLocationUpdates() = source.cancelLiveLocationUpdates()
 }

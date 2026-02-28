@@ -90,6 +90,7 @@ fun LocationScreen(
             ) == PackageManager.PERMISSION_GRANTED
         ) {
             viewModel.retrieveCachedLocation()
+            viewModel.retrieveLiveLocation()
         }
 
         Text(
