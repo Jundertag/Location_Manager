@@ -1,9 +1,11 @@
 package com.jayden.locationmanager.data.repository
 
-import com.jayden.locationmanager.data.source.NmeaLogsDatabase
+import androidx.paging.PagingSource
+import com.jayden.locationmanager.data.source.room.dao.NmeaEventDao
+import com.jayden.locationmanager.data.source.room.entity.NmeaEventEntity
 
 class NmeaLogsRepo(
-    val database: NmeaLogsDatabase
+    val dao: NmeaEventDao
 ) {
-
+    fun pagingSource(): PagingSource<Long, NmeaEventEntity> = dao.pagingSource()
 }
