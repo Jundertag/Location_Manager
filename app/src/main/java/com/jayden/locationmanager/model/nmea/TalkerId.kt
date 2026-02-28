@@ -82,7 +82,8 @@ enum class TalkerId {
     TIMEKEEPER_ATOMIC_CLOCK,
     TIMEKEEPER_CHRONOMETER,
     TIMEKEEPER_QUARTZ,
-    TIMEKEEPER_RADIO_UPDATE_WWV_WWVH;
+    TIMEKEEPER_RADIO_UPDATE_WWV_WWVH,
+    UNKNOWN;
 
     override fun toString(): String = when (this) {
         INDEPENDENT_AIS -> "Independent AIS Base Station"
@@ -167,5 +168,6 @@ enum class TalkerId {
         TIMEKEEPER_CHRONOMETER -> "Timekeeper - Chronometer"
         TIMEKEEPER_QUARTZ -> "Timekeeper - Quartz"
         TIMEKEEPER_RADIO_UPDATE_WWV_WWVH -> "Timekeeper - Radio Update, WWV or WWVH"
+        UNKNOWN -> "Unknown"
     }
 }

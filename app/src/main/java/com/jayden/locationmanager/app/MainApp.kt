@@ -43,8 +43,8 @@ class MainApp : Application() {
         locationRepo = LocationRepo(appLocationManager)
         mainViewModelFactory = MainViewModelFactory(locationRepo)
         locationViewModelFactory = LocationViewModelFactory(locationRepo)
-        nmeaLogsRepo = NmeaLogsRepo(nmeaLogsDatabase.nmeaEventDao())
         nmeaLogsViewModelFactory = NmeaLogsViewModelFactory(nmeaLogsRepo)
         nmeaLogsListener = AppNmeaLogsListener(locationManager)
+        nmeaLogsRepo = NmeaLogsRepo(nmeaLogsDatabase.nmeaEventDao(), nmeaLogsListener)
     }
 }
