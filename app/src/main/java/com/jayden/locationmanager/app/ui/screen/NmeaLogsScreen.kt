@@ -1,6 +1,7 @@
 package com.jayden.locationmanager.app.ui.screen
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -19,6 +20,11 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -44,53 +50,66 @@ fun NmeaLogsScreen(
 
     val logs = viewModel.pagingFlow.collectAsLazyPagingItems()
 
+    var fineLocationGranted by remember { mutableStateOf(false) }
+
     val permissionLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            fineLocationGranted = granted
             if (granted) {
+                @SuppressLint("MissingPermission")
                 viewModel.initializeNmeaLogging()
             } else {
                 Toast.makeText(context, "Precise location required to record logs", Toast.LENGTH_LONG).show()
             }
         }
 
-    if (ContextCompat.checkSelfPermission(
-            context,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
-    ) {
+    if (fineLocationGranted) {
+        @SuppressLint("MissingPermission")
         viewModel.initializeNmeaLogging()
+    }
+
+    if (fineLocationGranted) {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            items(
+                logs.itemCount
+            ) { index ->
+                val log = logs[index]!!
+                val event = log.toUi()
+
+                ElevatedCard(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                ) {
+                    Column(
+                        modifier = Modifier.padding(8.dp)
+                    ) {
+                        Text(
+                            log.getPrettySentenceType(),
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                        Spacer(Modifier.height(8.dp))
+                        event.fields.forEach { field ->
+                            Text(field.toString(), style = MaterialTheme.typography.bodySmall)
+                        }
+                    }
+                }
+            }
+        }
     } else {
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .clickable { permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION) }
         ) {
-            Text("Precise location required to show logs")
-        }
-    }
-
-    LazyColumn(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        items(
-            logs.itemCount
-        ) { index ->
-            val log = logs[index]!!
-            val event = log.toUi()
-
-            ElevatedCard(
+            Text(
+                "Precise location required to show logs",
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp, vertical = 4.dp)
-            ) {
-                Column(
-                    modifier = Modifier.padding(8.dp)
-                ) {
-                    Text(log.getPrettySentenceType(), style = MaterialTheme.typography.titleMedium)
-                    Spacer(Modifier.height(8.dp))
-
-                }
-            }
+                    .align(Alignment.TopCenter)
+                    .padding(top = 6.dp)
+            )
         }
     }
 }
