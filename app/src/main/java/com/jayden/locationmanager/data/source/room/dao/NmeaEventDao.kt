@@ -23,5 +23,5 @@ interface NmeaEventDao {
     @Query("""
         DELETE FROM nmea_events WHERE timestamp < :time
     """)
-    suspend fun deleteOld(time: Long)
+    suspend fun deleteOld(time: Long): Int
 }

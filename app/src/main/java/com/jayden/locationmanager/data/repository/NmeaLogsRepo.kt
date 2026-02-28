@@ -8,4 +8,5 @@ class NmeaLogsRepo(
     val dao: NmeaEventDao
 ) {
     fun pagingSource(): PagingSource<Long, NmeaEventEntity> = dao.pagingSource()
+    suspend fun deleteOlder(time: Long): Int = dao.deleteOld(time)
 }
