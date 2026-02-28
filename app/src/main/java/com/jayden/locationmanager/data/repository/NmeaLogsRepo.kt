@@ -8,7 +8,6 @@ import androidx.paging.map
 import com.jayden.locationmanager.data.source.AppNmeaLogsListener
 import com.jayden.locationmanager.data.source.room.dao.NmeaEventDao
 import com.jayden.locationmanager.data.source.room.entity.NmeaEventEntity
-import com.jayden.locationmanager.model.nmea.NmeaEvent
 import com.jayden.locationmanager.model.nmea.typeconverter.TypeConverter.toNmeaEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.map

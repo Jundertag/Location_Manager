@@ -28,7 +28,6 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.jayden.locationmanager.app.MainApp
 import com.jayden.locationmanager.app.ui.model.nmea.UiTypeConverter.toUi
 import com.jayden.locationmanager.app.viewmodel.NmeaLogsViewModel
-import com.jayden.locationmanager.model.nmea.NmeaMessage
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

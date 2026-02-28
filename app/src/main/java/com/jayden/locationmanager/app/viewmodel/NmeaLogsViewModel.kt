@@ -4,11 +4,7 @@ import android.Manifest
 import androidx.annotation.RequiresPermission
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import com.jayden.locationmanager.app.ui.model.nmea.NmeaMessageUi
 import com.jayden.locationmanager.data.repository.NmeaLogsRepo
-import com.jayden.locationmanager.model.nmea.NmeaEvent
 import kotlinx.coroutines.launch
 
 class NmeaLogsViewModel(
