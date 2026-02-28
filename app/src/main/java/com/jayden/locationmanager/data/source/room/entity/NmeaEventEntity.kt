@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(
-    tableName = "nmea_event",
+    tableName = "nmea_events",
 )
 data class NmeaEventEntity(
     @PrimaryKey(autoGenerate = true)
