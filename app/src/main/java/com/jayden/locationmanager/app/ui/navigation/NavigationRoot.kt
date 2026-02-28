@@ -56,16 +56,15 @@ fun NavigationRoot(
         bottomBar = {
             NavigationBar {
                 NavigationBarItem(
-                    selected = (backStack.first() == NavigationGraph.Location),
+                    selected = (backStack.last() == NavigationGraph.Location),
                     onClick = {
-                        if (backStack.first() != NavigationGraph.Location)
-                            backStack.add(0,NavigationGraph.Location)
+                        backStack.add(NavigationGraph.Location)
                     },
                     icon = {
                         Icon(
                             modifier = Modifier
                                 .size(24.dp),
-                            painter = if (backStack.first() == NavigationGraph.Location) {
+                            painter = if (backStack.last() == NavigationGraph.Location) {
                                 painterResource(R.drawable.ic_location_filled)
                             } else {
                                 painterResource(R.drawable.ic_location)
@@ -75,16 +74,15 @@ fun NavigationRoot(
                     }
                 )
                 NavigationBarItem(
-                    selected = (backStack.first() == NavigationGraph.NmeaLogs),
+                    selected = (backStack.last() == NavigationGraph.NmeaLogs),
                     onClick = {
-                        if (backStack.first() != NavigationGraph.NmeaLogs)
-                            backStack.add(0,NavigationGraph.NmeaLogs)
+                        backStack.add(NavigationGraph.NmeaLogs)
                     },
                     icon = {
                         Icon(
                             modifier = Modifier
                                 .size(24.dp),
-                            painter = if (backStack.first() == NavigationGraph.NmeaLogs) {
+                            painter = if (backStack.last() == NavigationGraph.NmeaLogs) {
                                 painterResource(R.drawable.ic_structured_data_filled)
                             } else {
                                 painterResource(R.drawable.ic_structured_data)
@@ -103,34 +101,30 @@ fun NavigationRoot(
                 rememberViewModelStoreNavEntryDecorator(),
             ),
             modifier = Modifier.padding(padding),
-            entryProvider = { key ->
-                when (key) {
-                    is NavigationGraph.Location -> NavEntry(key = key) {
-                        LocationScreen(
-                            app = app,
-                            onBack = {
-                                if (backStack.size > 1) {
-                                    backStack.removeLastOrNull()
-                                }
-                            }
-                        )
-                    }
-
-                    is NavigationGraph.NmeaLogs -> NavEntry(key = key) {
-                        NmeaLogsScreen(
-                            app = app,
-                            onBack = {
-                                if (backStack.size > 1) {
-                                    backStack.removeLastOrNull()
-                                }
-                            }
-                        )
-                    }
-
-                    else -> throw RuntimeException("Not a valid NavigationGraph destination $key")
+            onBack = {
+                if (backStack.size > 1) {
+                    backStack.removeLastOrNull()
                 }
+            },
+        ) { key ->
+            when (key) {
+                is NavigationGraph.Location -> NavEntry(key = key) {
+                    LocationScreen(
+                        app = app,
+                        onBack = {}
+                    )
+                }
+
+                is NavigationGraph.NmeaLogs -> NavEntry(key = key) {
+                    NmeaLogsScreen(
+                        app = app,
+                        onBack = {}
+                    )
+                }
+
+                else -> throw RuntimeException("Not a valid NavigationGraph destination $key")
             }
-        )
+        }
     }
 }
 
