@@ -50,7 +50,7 @@ fun NmeaLogsScreen(
 
     val logs = viewModel.pagingFlow.collectAsLazyPagingItems()
 
-    var fineLocationGranted by remember { mutableStateOf(false) }
+    var fineLocationGranted by remember { mutableStateOf(ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) }
 
     val permissionLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
