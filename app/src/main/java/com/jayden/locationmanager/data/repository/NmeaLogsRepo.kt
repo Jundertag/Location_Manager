@@ -13,7 +13,7 @@ class NmeaLogsRepo(
     val dao: NmeaEventDao,
     val listener: AppNmeaLogsListener
 ) {
-    fun pagingSource(): PagingSource<Long, NmeaEventEntity> = dao.pagingSource()
+    fun pagingSource(): PagingSource<Int, NmeaEventEntity> = dao.pagingSource()
     suspend fun deleteOlder(time: Long): Int = dao.deleteOld(time)
 
     @RequiresPermission(Manifest.permission.ACCESS_FINE_LOCATION)

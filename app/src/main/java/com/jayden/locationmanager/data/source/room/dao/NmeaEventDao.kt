@@ -17,8 +17,9 @@ interface NmeaEventDao {
 
     @Query("""
         SELECT * FROM nmea_events
+        ORDER BY timestamp DESC, id DESC
     """)
-    fun pagingSource(): PagingSource<Long, NmeaEventEntity>
+    fun pagingSource(): PagingSource<Int, NmeaEventEntity>
 
     @Query("""
         DELETE FROM nmea_events WHERE timestamp < :time
