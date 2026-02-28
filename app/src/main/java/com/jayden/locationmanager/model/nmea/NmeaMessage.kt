@@ -1,6 +1,8 @@
 package com.jayden.locationmanager.model.nmea
 
 import com.jayden.locationmanager.model.nmea.indicator.FaaModeIndicator
+import com.jayden.locationmanager.model.nmea.units.CrossTrackUnit
+import com.jayden.locationmanager.model.nmea.units.RadiusUnit
 import com.jayden.locationmanager.model.nmea.warning.CycleLockWarningFlag
 import com.jayden.locationmanager.model.nmea.warning.GeneralWarningFlag
 
