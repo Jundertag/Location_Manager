@@ -1,5 +1,6 @@
 package com.jayden.locationmanager.model.nmea
 
+import com.jayden.locationmanager.model.nmea.indicator.FaaModeIndicator
 import com.jayden.locationmanager.model.nmea.warning.CycleLockWarningFlag
 import com.jayden.locationmanager.model.nmea.warning.GeneralWarningFlag
 
@@ -172,7 +173,7 @@ sealed interface NmeaMessage {
         val utcTime: NmeaUtcTime?,
         val latitude: Double?,
         val longitude: Double?,
-        val modeIndicator: ModeIndicator?,
+        val modeIndicator: FaaModeIndicator?,
         val numOfSatellites: Int?,
         val horizontalPrecisionDilution: Double?,
         val antennaAltitudeSeaLevelMeters: Double?,
