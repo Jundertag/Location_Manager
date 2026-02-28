@@ -4,14 +4,15 @@ import android.Manifest
 import androidx.annotation.RequiresPermission
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import androidx.paging.PagingSource
 import androidx.paging.map
 import com.jayden.locationmanager.data.source.AppNmeaLogsListener
 import com.jayden.locationmanager.data.source.room.dao.NmeaEventDao
 import com.jayden.locationmanager.data.source.room.entity.NmeaEventEntity
 import com.jayden.locationmanager.model.nmea.NmeaEvent
 import com.jayden.locationmanager.model.nmea.typeconverter.TypeConverter.toNmeaEvent
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
 class NmeaLogsRepo(
     val dao: NmeaEventDao,
@@ -31,11 +32,13 @@ class NmeaLogsRepo(
     suspend fun deleteOlder(time: Long): Int = dao.deleteOld(time)
 
     @RequiresPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-    fun listenToNmeaMessages(
-        receiver: (NmeaEvent) -> Unit
+    fun initializeNmeaLogging(
+        scope: CoroutineScope
     ) {
         listener.listenForNmeaMessages { message ->
-            receiver(message.toNmeaEvent())
+            scope.launch {
+                dao.insert(NmeaEventEntity(event = message))
+            }
         }
     }
 }

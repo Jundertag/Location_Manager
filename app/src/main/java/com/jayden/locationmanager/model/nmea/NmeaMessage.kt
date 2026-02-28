@@ -38,7 +38,7 @@ sealed interface NmeaMessage {
         val cycleLockWarning: CycleLockWarningFlag?,
         val crossTrackErrorMagnitude: Double?,
         val steeringDirection: SteeringDirection?,
-        val crossTrackUnits: CrossTrackUnit?,
+        val crossTrackUnit: CrossTrackUnit?,
         val arrivalCircleEntered: Boolean?,
         val perpendicularPassed: Boolean?,
         val bearing: Double?,
@@ -54,7 +54,7 @@ sealed interface NmeaMessage {
         val crossTrackUnit: CrossTrackUnit?,
         val arrivalCircleEntered: Boolean?,
         val perpendicularPassed: Boolean?,
-        val bearingOrigin: Double,
+        val bearingOrigin: Double?,
         val bearingOriginReference: CompassReference?,
         val destinationId: String?,
         val bearingPresent: Double?,
@@ -118,16 +118,16 @@ sealed interface NmeaMessage {
         val checksum: UByte?
     ) : NmeaMessage
     data class DptEvent(
-        val waterDepth: Double?,
-        val transducerOffset: Double?,
+        val waterDepthMeters: Double?,
+        val transducerOffsetMeters: Double?,
         val maxRangeScale: Double?,
         val checksum: UByte?
     ) : NmeaMessage
     data class DtmEvent(
         val datumCode: String?,
         val datumSubcode: String?,
-        val latitudeOffset: Double?,
-        val longitudeOffset: Double?,
+        val latitudeOffsetMinutes: Double?,
+        val longitudeOffsetMinutes: Double?,
         val altitudeOffset: Double?,
         val datumName: String?,
         val checksum: UByte?
@@ -147,7 +147,7 @@ sealed interface NmeaMessage {
         val failedSatelliteId: Int?,
         val missedDetectionProbability: Double?,
         val failedSatelliteBiasMeters: Double?,
-        val estimateStandardDeviationMeters: Double?,
+        val biasStandardDeviationMeters: Double?,
         val checksum: UByte?
     ) : NmeaMessage
     data class GgaEvent(

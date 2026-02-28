@@ -12,6 +12,9 @@ interface NmeaEventDao {
     @Insert
     suspend fun insertAll(vararg events: NmeaEventEntity)
 
+    @Insert
+    suspend fun insert(event: NmeaEventEntity)
+
     @Delete
     suspend fun delete(event: NmeaEventEntity)
 
