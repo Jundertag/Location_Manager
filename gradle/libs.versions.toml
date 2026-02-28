@@ -13,6 +13,7 @@ nav3Core = "1.0.1"
 kotlin = "2.3.10"
 material3Adaptive = "1.2.0"
 lifecycleViewmodelNav3 = "2.10.0"
+ksp = "2.3.4"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -39,3 +40,4 @@ androidx-compose-material3-adaptive-navigation = { group = "androidx.compose.mat
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
