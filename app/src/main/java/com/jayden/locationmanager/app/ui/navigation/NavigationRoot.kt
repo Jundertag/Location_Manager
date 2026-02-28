@@ -51,7 +51,7 @@ fun NavigationRoot(
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Location Manager", style = MaterialTheme.typography.titleLarge) })
+            TopAppBar(title = { Text("${backStack.last()}", style = MaterialTheme.typography.titleLarge) })
         },
         bottomBar = {
             NavigationBar {

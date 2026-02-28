@@ -6,7 +6,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 sealed interface NavigationGraph : NavKey {
     @Serializable
-    data object Location : NavigationGraph
+    data object Location : NavigationGraph {
+        override fun toString(): String = "Location"
+    }
     @Serializable
-    data object NmeaLogs : NavigationGraph
+    data object NmeaLogs : NavigationGraph {
+        override fun toString(): String = "Nmea Logs"
+    }
 }

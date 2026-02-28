@@ -10,12 +10,7 @@ import kotlinx.coroutines.launch
 class NmeaLogsViewModel(
     private val repo: NmeaLogsRepo
 ) : ViewModel() {
-    val pagingFlow = Pager(
-        config = PagingConfig(
-            pageSize = 10
-        ),
-        pagingSourceFactory = { repo.pagingSource() }
-    ).flow
+    val pagingFlow = repo.pagingFlow()
 
     fun deleteOlder(time: Long) {
         viewModelScope.launch {
