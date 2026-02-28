@@ -1,4 +1,4 @@
-package com.jayden.locationmanager.data.source
+package com.jayden.locationmanager.data.source.room
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

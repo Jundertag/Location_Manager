@@ -10,9 +10,8 @@ import android.os.Build
 import androidx.annotation.RequiresPermission
 
 class AppLocationManager(
-    private val context: Context
+    private val locationManager: LocationManager
 ) {
-    val locationManager: LocationManager = context.getSystemService(LocationManager::class.java)
     val gpsProvider = LocationManager.GPS_PROVIDER
 
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
