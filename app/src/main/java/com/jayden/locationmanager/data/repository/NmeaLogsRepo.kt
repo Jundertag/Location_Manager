@@ -1,4 +1,9 @@
 package com.jayden.locationmanager.data.repository
 
-class NmeaLogsRepo {
+import com.jayden.locationmanager.data.source.NmeaLogsDatabase
+
+class NmeaLogsRepo(
+    val database: NmeaLogsDatabase
+) {
+
 }

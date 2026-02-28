@@ -1,10 +1,12 @@
 package com.jayden.locationmanager.app
 
 import android.app.Application
+import androidx.room.Room
 import com.jayden.locationmanager.app.viewmodel.LocationViewModelFactory
 import com.jayden.locationmanager.app.viewmodel.MainViewModelFactory
 import com.jayden.locationmanager.data.repository.LocationRepo
 import com.jayden.locationmanager.data.source.AppLocationManager
+import com.jayden.locationmanager.data.source.NmeaLogsDatabase
 
 class MainApp : Application() {
     lateinit var locationManager: AppLocationManager
@@ -15,6 +17,13 @@ class MainApp : Application() {
         private set
     lateinit var locationViewModelFactory: LocationViewModelFactory
         private set
+
+    val nmeaLogsDatabase by lazy {
+        Room.databaseBuilder(
+            applicationContext,
+            NmeaLogsDatabase::class.java, "nmea_logs_db"
+        ).build()
+    }
 
     override fun onCreate() {
         super.onCreate()
