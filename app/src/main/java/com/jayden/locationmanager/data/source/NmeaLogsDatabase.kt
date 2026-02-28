@@ -1,4 +1,7 @@
 package com.jayden.locationmanager.data.source
 
-class NmeaLogsDatabase {
+import androidx.room.Database
+
+@Database(version = 1, entities = [])
+abstract class NmeaLogsDatabase {
 }
