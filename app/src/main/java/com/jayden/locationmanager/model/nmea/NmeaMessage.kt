@@ -1,4 +1,4 @@
-package com.jayden.locationmanager.data.model
+package com.jayden.locationmanager.model.nmea
 
 sealed interface NmeaMessage {
     data class AamEvent(

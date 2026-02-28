@@ -3,7 +3,7 @@ package com.jayden.locationmanager.app.viewmodel
 import android.Manifest
 import androidx.annotation.RequiresPermission
 import androidx.lifecycle.ViewModel
-import com.jayden.locationmanager.data.model.Coordinate
+import com.jayden.locationmanager.model.location.Coordinate
 import com.jayden.locationmanager.data.repository.LocationRepo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

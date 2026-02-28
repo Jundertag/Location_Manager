@@ -1,4 +1,4 @@
-package com.jayden.locationmanager.data.model
+package com.jayden.locationmanager.model.nmea
 
 enum class GpsQualityIndicator {
     FIX_NOT_AVAILABLE,

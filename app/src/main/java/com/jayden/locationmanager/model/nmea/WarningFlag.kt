@@ -1,4 +1,4 @@
-package com.jayden.locationmanager.data.model
+package com.jayden.locationmanager.model.nmea
 
 enum class WarningFlag {
     WARNING_FIX_NOT_AVAILABLE,

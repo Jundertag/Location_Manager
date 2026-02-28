@@ -1,4 +1,4 @@
-package com.jayden.locationmanager.data.model
+package com.jayden.locationmanager.model.location
 
 data class Coordinate(
     val latitude: Double,

@@ -3,7 +3,7 @@ package com.jayden.locationmanager.data.repository
 import android.Manifest
 import android.location.LocationManager
 import androidx.annotation.RequiresPermission
-import com.jayden.locationmanager.data.model.Coordinate
+import com.jayden.locationmanager.model.location.Coordinate
 import com.jayden.locationmanager.data.source.AppLocationManager
 
 class LocationRepo(
