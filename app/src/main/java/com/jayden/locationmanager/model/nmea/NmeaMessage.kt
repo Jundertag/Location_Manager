@@ -1,5 +1,8 @@
 package com.jayden.locationmanager.model.nmea
 
+import com.jayden.locationmanager.model.nmea.warning.CycleLockWarningFlag
+import com.jayden.locationmanager.model.nmea.warning.GeneralWarningFlag
+
 sealed interface NmeaMessage {
     data class AamEvent(
         val arrivalCircleEntered: Boolean?,
@@ -28,7 +31,7 @@ sealed interface NmeaMessage {
         val checksum: UByte?
     ) : NmeaMessage
     data class ApaEvent(
-        val generalWarning: WarningFlag?,
+        val generalWarning: GeneralWarningFlag?,
         val cycleLockWarning: CycleLockWarningFlag?,
         val crossTrackErrorMagnitude: Double?,
         val steeringDirection: SteeringDirection?,
@@ -41,7 +44,7 @@ sealed interface NmeaMessage {
         val checksum: UByte?
     ) : NmeaMessage
     data class ApbEvent(
-        val generalWarning: WarningFlag?,
+        val generalWarning: GeneralWarningFlag?,
         val cycleLockWarning: CycleLockWarningFlag?,
         val crossTrackErrorMagnitude: Double?,
         val steeringDirection: SteeringDirection?,
