@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 )
 data class NmeaEventEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Long,
+    val id: Long = 0L,
     val timestamp: Long = System.currentTimeMillis(),
     val event: String
 )
