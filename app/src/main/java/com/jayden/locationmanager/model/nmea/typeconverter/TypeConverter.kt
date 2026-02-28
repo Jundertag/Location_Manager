@@ -2,10 +2,11 @@ package com.jayden.locationmanager.model.nmea.typeconverter
 
 import com.jayden.locationmanager.model.nmea.NmeaEvent
 import com.jayden.locationmanager.model.nmea.NmeaMessage
+import com.jayden.locationmanager.model.nmea.NmeaSentence
 import com.jayden.locationmanager.model.nmea.TalkerId
 
 object TypeConverter {
-    private val TalkerIdRegex = Regex("""[$!].{2}""")
+    private val TalkerIdRegex = Regex("""^[$!].{2}""")
 
     fun String?.parseTalkerId(): TalkerId = when (this) {
         "AB" -> TalkerId.INDEPENDENT_AIS
@@ -52,9 +53,22 @@ object TypeConverter {
         else -> TalkerId.UNKNOWN
     }
 
+    fun String?.parseSentence(): NmeaSentence = when (this) {
+        null -> NmeaSentence.UNKNOWN
+        else -> NmeaSentence.UNKNOWN
+    }
+
+    fun getTalkerId(input: String): TalkerId {
+        return if (input.contains(Regex("""^[$!]P"""))) {
+            TalkerId.PROPRIETARY
+        } else {
+            TalkerIdRegex.find(input)?.value?.drop(1).parseTalkerId()
+        }
+    }
+
     fun String.toNmeaEvent(): NmeaEvent {
         return NmeaEvent(
-            talkerId = TalkerIdRegex.find(this)?.value?.drop(1).parseTalkerId(),
+            talkerId = getTalkerId(this),
             message = NmeaMessage.RawEvent(this)
         )
     }

@@ -138,7 +138,7 @@ enum class TalkerId {
         ENGINE_GOVERNOR -> "Engine Governor"
         MULTIPLEXER -> "Multiplexer"
         NAVIGATION_LIGHT_CONTROLLER -> "Navigation light controller"
-        PROPRIETARY -> "Proprietary protocol"
+        PROPRIETARY -> "Vendor specific"
         RADAR_ARPA -> "RADAR and/or ARPA"
         RECORD_BOOK -> "Record Book"
         PROPULSION_MACHINERY -> "Propulsion Machinery"

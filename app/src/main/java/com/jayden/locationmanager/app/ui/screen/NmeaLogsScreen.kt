@@ -7,8 +7,10 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -81,15 +83,25 @@ fun NmeaLogsScreen(
                 ElevatedCard(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                        .padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
                 ) {
                     Column(
-                        modifier = Modifier.padding(8.dp)
+                        modifier = Modifier.padding(12.dp)
                     ) {
-                        Text(
-                            log.getPrettySentenceType(),
-                            style = MaterialTheme.typography.titleMedium
-                        )
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                log.getPrettySentenceType(),
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                            Text(log.talkerId.toString(),
+                                style = MaterialTheme.typography.bodySmall
+                            )
+                        }
+
                         Spacer(Modifier.height(8.dp))
                         event.fields.forEach { field ->
                             Text(field.toString(), style = MaterialTheme.typography.bodySmall)

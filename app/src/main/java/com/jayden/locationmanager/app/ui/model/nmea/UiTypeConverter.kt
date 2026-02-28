@@ -6,7 +6,7 @@ import com.jayden.locationmanager.model.nmea.NmeaMessage
 object UiTypeConverter {
     fun NmeaEvent.toUi(): NmeaMessageUi = when (this.message) {
         is NmeaMessage.AamEvent -> {
-            NmeaMessageUi(title = this.getPrettySentenceType(), fields = listOf(
+            NmeaMessageUi(title = this.getPrettySentenceType(), talkerId = talkerId, fields = listOf(
                 NmeaFieldUi(name = "Arrived", value = this.message.arrivalCircleEntered?.toString()),
                 NmeaFieldUi(name = "Passed Destination", value = this.message.perpendicularPassed?.toString()),
                 NmeaFieldUi(name = "Arrived Radius", value = this.message.arrivalCircleRadius?.toString()),
@@ -15,7 +15,7 @@ object UiTypeConverter {
             ))
         }
         is NmeaMessage.AlmEvent -> {
-            NmeaMessageUi(title = this.getPrettySentenceType(), fields = listOf(
+            NmeaMessageUi(title = this.getPrettySentenceType(), talkerId = talkerId, fields = listOf(
                 NmeaFieldUi(name = "Message count", value = this.message.messageCount?.toString()),
                 NmeaFieldUi(name = "Sentence Number", value = this.message.sentenceNumber?.toString()),
                 NmeaFieldUi(name = "Satellite PRN Number", value = this.message.satellitePrnNumber?.toString()),
@@ -35,7 +35,7 @@ object UiTypeConverter {
             ))
         }
         is NmeaMessage.ApaEvent -> {
-            NmeaMessageUi(title = this.getPrettySentenceType(), fields = listOf(
+            NmeaMessageUi(title = this.getPrettySentenceType(), talkerId = talkerId, fields = listOf(
                 NmeaFieldUi(name = "General Warning", value = this.message.generalWarning?.toString()),
                 NmeaFieldUi(name = "Cycle Lock Warning", value = this.message.cycleLockWarning?.toString()),
                 NmeaFieldUi(name = "Cross Track Error Magnitude", value = this.message.crossTrackErrorMagnitude?.toString()),
@@ -50,7 +50,7 @@ object UiTypeConverter {
             ))
         }
         is NmeaMessage.ApbEvent -> {
-            NmeaMessageUi(title = this.getPrettySentenceType(), fields = listOf(
+            NmeaMessageUi(title = this.getPrettySentenceType(), talkerId = talkerId, fields = listOf(
                 NmeaFieldUi(name = "General Warning", value = this.message.generalWarning?.toString()),
                 NmeaFieldUi(name = "Cycle Lock Warning", value = this.message.cycleLockWarning?.toString()),
                 NmeaFieldUi(name = "Cross Track Error Magnitude", value = this.message.crossTrackErrorMagnitude?.toString()),
@@ -69,7 +69,7 @@ object UiTypeConverter {
             ))
         }
         is NmeaMessage.BodEvent -> {
-            NmeaMessageUi(title = this.getPrettySentenceType(), fields = listOf(
+            NmeaMessageUi(title = this.getPrettySentenceType(), talkerId = talkerId, fields = listOf(
                 NmeaFieldUi(name = "True Bearing", value = this.message.trueBearing?.toString()),
                 NmeaFieldUi(name = "Magnetic Bearing", value = this.message.magneticBearing?.toString()),
                 NmeaFieldUi(name = "Destination Waypoint ID", value = this.message.destinationWaypointId),
@@ -78,7 +78,7 @@ object UiTypeConverter {
             ))
         }
         is NmeaMessage.BwcEvent -> {
-            NmeaMessageUi(title = this.getPrettySentenceType(), fields = listOf(
+            NmeaMessageUi(title = this.getPrettySentenceType(), talkerId = talkerId, fields = listOf(
                 NmeaFieldUi(name = "UTC Time or observation", value = this.message.utcTime?.toString()),
                 NmeaFieldUi(name = "Waypoint Latitude", value = this.message.waypointLatitude?.toString()),
                 NmeaFieldUi(name = "Waypoint Longitude", value = this.message.waypointLongitude?.toString()),
@@ -91,7 +91,7 @@ object UiTypeConverter {
             ))
         }
         is NmeaMessage.BwrEvent -> {
-            NmeaMessageUi(title = this.getPrettySentenceType(), fields = listOf(
+            NmeaMessageUi(title = this.getPrettySentenceType(), talkerId = talkerId, fields = listOf(
                 NmeaFieldUi(name = "UTC Time or observation", value = this.message.utcTime?.toString()),
                 NmeaFieldUi(name = "Waypoint Latitude", value = this.message.waypointLatitude?.toString()),
                 NmeaFieldUi(name = "Waypoint Longitude", value = this.message.waypointLongitude?.toString()),
@@ -104,7 +104,7 @@ object UiTypeConverter {
             ))
         }
         is NmeaMessage.BwwEvent -> {
-            NmeaMessageUi(title = this.getPrettySentenceType(), fields = listOf(
+            NmeaMessageUi(title = this.getPrettySentenceType(), talkerId = talkerId, fields = listOf(
                 NmeaFieldUi(name = "True Bearing", value = this.message.trueBearing?.toString()),
                 NmeaFieldUi(name = "Magnetic Bearing", value = this.message.magneticBearing?.toString()),
                 NmeaFieldUi(name = "Destination Waypoint ID", value = this.message.destinationWaypointId),
@@ -113,7 +113,7 @@ object UiTypeConverter {
             ))
         }
         is NmeaMessage.DbkEvent -> {
-            NmeaMessageUi(title = this.getPrettySentenceType(), fields = listOf(
+            NmeaMessageUi(title = this.getPrettySentenceType(), talkerId = talkerId, fields = listOf(
                 NmeaFieldUi(name = "Depth in Feet", value = this.message.depthFeet?.toString()),
                 NmeaFieldUi(name = "Depth in Meters", value = this.message.depthMeters?.toString()),
                 NmeaFieldUi(name = "Depth in Fathoms", value = this.message.depthFathoms?.toString()),
@@ -121,7 +121,7 @@ object UiTypeConverter {
             ))
         }
         is NmeaMessage.DbsEvent -> {
-            NmeaMessageUi(title = this.getPrettySentenceType(), fields = listOf(
+            NmeaMessageUi(title = this.getPrettySentenceType(), talkerId = talkerId, fields = listOf(
                 NmeaFieldUi(name = "Depth in Feet", value = this.message.depthFeet?.toString()),
                 NmeaFieldUi(name = "Depth in Meters", value = this.message.depthMeters?.toString()),
                 NmeaFieldUi(name = "Depth in Fathoms", value = this.message.depthFathoms?.toString()),
@@ -129,7 +129,7 @@ object UiTypeConverter {
             ))
         }
         is NmeaMessage.DbtEvent -> {
-            NmeaMessageUi(title = this.getPrettySentenceType(), fields = listOf(
+            NmeaMessageUi(title = this.getPrettySentenceType(), talkerId = talkerId, fields = listOf(
                 NmeaFieldUi(name = "Depth in Feet", value = this.message.depthFeet?.toString()),
                 NmeaFieldUi(name = "Depth in Meters", value = this.message.depthMeters?.toString()),
                 NmeaFieldUi(name = "Depth in Fathoms", value = this.message.depthFathoms?.toString()),
@@ -137,7 +137,7 @@ object UiTypeConverter {
             ))
         }
         is NmeaMessage.DptEvent -> {
-            NmeaMessageUi(title = this.getPrettySentenceType(), fields = listOf(
+            NmeaMessageUi(title = this.getPrettySentenceType(), talkerId = talkerId, fields = listOf(
                 NmeaFieldUi(name = "Water Depth", value = this.message.waterDepthMeters?.toString()?.plus(" m")),
                 NmeaFieldUi(name = "Transducer Offset", value = this.message.transducerOffsetMeters?.toString()?.plus(" m")),
                 NmeaFieldUi(name = "Maximum range", value = this.message.maxRangeScale?.toString()),
@@ -145,7 +145,7 @@ object UiTypeConverter {
             ))
         }
         is NmeaMessage.DtmEvent -> {
-            NmeaMessageUi(title = this.getPrettySentenceType(), fields = listOf(
+            NmeaMessageUi(title = this.getPrettySentenceType(), talkerId = talkerId, fields = listOf(
                 NmeaFieldUi(name = "Datum Code", value = this.message.datumCode),
                 NmeaFieldUi(name = "Datum Sub-code", value = this.message.datumSubcode),
                 NmeaFieldUi(name = "Latitude Offset ", value = this.message.latitudeOffsetMinutes?.toString()?.plus(" min")),
@@ -156,7 +156,7 @@ object UiTypeConverter {
             ))
         }
         is NmeaMessage.FsiEvent -> {
-            NmeaMessageUi(title = this.getPrettySentenceType(), fields = listOf(
+            NmeaMessageUi(title = this.getPrettySentenceType(), talkerId = talkerId, fields = listOf(
                 NmeaFieldUi(name = "Transmitting Frequency", value = this.message.transmittingFrequency?.toString()),
                 NmeaFieldUi(name = "Receiving Frequency", value = this.message.receivingFrequency?.toString()),
                 NmeaFieldUi(name = "Communications Mode", value = this.message.communicationsMode),
@@ -165,7 +165,7 @@ object UiTypeConverter {
             ))
         }
         is NmeaMessage.GbsEvent -> {
-            NmeaMessageUi(title = this.getPrettySentenceType(), fields = listOf(
+            NmeaMessageUi(title = this.getPrettySentenceType(), talkerId = talkerId, fields = listOf(
                 NmeaFieldUi(name = "UTC Time of GGA or GNS fix", value = this.message.utcTimeOfGnsFix?.toString()),
                 NmeaFieldUi(name = "Latitude Error", value = this.message.latitudeErrorMeters?.toString()?.plus(" m")),
                 NmeaFieldUi(name = "Longitude Error", value = this.message.longitudeErrorMeters?.toString()?.plus(" m")),
@@ -178,36 +178,36 @@ object UiTypeConverter {
             ))
         }
         is NmeaMessage.GgaEvent -> {
-            NmeaMessageUi(title = this.getPrettySentenceType(), fields = listOf(
+            NmeaMessageUi(title = this.getPrettySentenceType(), talkerId = talkerId, fields = listOf(
                 NmeaFieldUi(name = "TODO", value = null),
                 NmeaFieldUi(name = "Checksum", value = this.message.checksum?.toString()),
             ))
         }
         is NmeaMessage.GllEvent -> {
-            NmeaMessageUi(title = this.getPrettySentenceType(), fields = listOf(
+            NmeaMessageUi(title = this.getPrettySentenceType(), talkerId = talkerId, fields = listOf(
                 NmeaFieldUi(name = "TODO", value = null),
                 NmeaFieldUi(name = "Checksum", value = this.message.checksum?.toString()),
             ))
         }
         is NmeaMessage.GnsEvent -> {
-            NmeaMessageUi(title = this.getPrettySentenceType(), fields = listOf(
+            NmeaMessageUi(title = this.getPrettySentenceType(), talkerId = talkerId, fields = listOf(
                 NmeaFieldUi(name = "TODO", value = null),
                 NmeaFieldUi(name = "Checksum", value = this.message.checksum?.toString()),
             ))
         }
         is NmeaMessage.GrsEvent -> {
-            NmeaMessageUi(title = this.getPrettySentenceType(), fields = listOf(
+            NmeaMessageUi(title = this.getPrettySentenceType(), talkerId = talkerId, fields = listOf(
                 NmeaFieldUi(name = "TODO", value = null),
                 NmeaFieldUi(name = "Checksum", value = this.message.checksum?.toString()),
             ))
         }
         is NmeaMessage.ProprietaryEvent -> {
-            NmeaMessageUi(title = this.getPrettySentenceType(), fields = listOf(
+            NmeaMessageUi(title = this.getPrettySentenceType(), talkerId = talkerId, fields = listOf(
                 NmeaFieldUi(name = "Raw", value = this.message.raw),
             ))
         }
         is NmeaMessage.RawEvent -> {
-            NmeaMessageUi(title = this.getPrettySentenceType(), fields = listOf(
+            NmeaMessageUi(title = this.getPrettySentenceType(), talkerId = talkerId, fields = listOf(
                 NmeaFieldUi(name = "Raw", value = this.message.raw),
             ))
         }
