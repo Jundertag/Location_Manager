@@ -28,7 +28,8 @@ import com.jayden.locationmanager.app.viewmodel.LocationViewModel
 @Composable
 fun LocationScreen(
     modifier: Modifier = Modifier,
-    app: MainApp
+    app: MainApp,
+    onBack: () -> Unit
 ) {
     val viewModel: LocationViewModel = viewModel(
         factory = app.locationViewModelFactory

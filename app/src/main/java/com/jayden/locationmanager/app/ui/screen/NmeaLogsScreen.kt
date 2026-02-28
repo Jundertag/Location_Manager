@@ -14,7 +14,8 @@ import com.jayden.locationmanager.app.viewmodel.NmeaLogsViewModel
 @Composable
 fun NmeaLogsScreen(
     modifier: Modifier = Modifier,
-    app: MainApp
+    app: MainApp,
+    onBack: () -> Unit
 ) {
     val viewModel: NmeaLogsViewModel = viewModel(
         factory = app.nmeaLogsViewModelFactory

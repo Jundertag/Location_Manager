@@ -1,5 +1,6 @@
 package com.jayden.locationmanager.app.ui.navigation
 
+import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.BottomAppBar
@@ -48,8 +49,6 @@ fun NavigationRoot(
         factory = app.mainViewModelFactory
     )
 
-    var selected by remember { mutableStateOf(backStack.last()) }
-
     Scaffold(
         topBar = {
             TopAppBar(title = { Text("Location Manager", style = MaterialTheme.typography.titleLarge) })
@@ -57,16 +56,16 @@ fun NavigationRoot(
         bottomBar = {
             NavigationBar {
                 NavigationBarItem(
-                    selected = (selected == NavigationGraph.Location),
+                    selected = (backStack.first() == NavigationGraph.Location),
                     onClick = {
-                        if (selected != NavigationGraph.Location)
-                            backStack.add(NavigationGraph.Location)
+                        if (backStack.first() != NavigationGraph.Location)
+                            backStack.add(0,NavigationGraph.Location)
                     },
                     icon = {
                         Icon(
                             modifier = Modifier
                                 .size(24.dp),
-                            painter = if (selected == NavigationGraph.Location) {
+                            painter = if (backStack.first() == NavigationGraph.Location) {
                                 painterResource(R.drawable.ic_location_filled)
                             } else {
                                 painterResource(R.drawable.ic_location)
@@ -76,16 +75,16 @@ fun NavigationRoot(
                     }
                 )
                 NavigationBarItem(
-                    selected = (selected == NavigationGraph.NmeaLogs),
+                    selected = (backStack.first() == NavigationGraph.NmeaLogs),
                     onClick = {
-                        if (selected != NavigationGraph.NmeaLogs)
-                            backStack.add(NavigationGraph.NmeaLogs)
+                        if (backStack.first() != NavigationGraph.NmeaLogs)
+                            backStack.add(0,NavigationGraph.NmeaLogs)
                     },
                     icon = {
                         Icon(
                             modifier = Modifier
                                 .size(24.dp),
-                            painter = if (selected == NavigationGraph.NmeaLogs) {
+                            painter = if (backStack.first() == NavigationGraph.NmeaLogs) {
                                 painterResource(R.drawable.ic_structured_data_filled)
                             } else {
                                 painterResource(R.drawable.ic_structured_data)
@@ -108,13 +107,23 @@ fun NavigationRoot(
                 when (key) {
                     is NavigationGraph.Location -> NavEntry(key = key) {
                         LocationScreen(
-                            app = app
+                            app = app,
+                            onBack = {
+                                if (backStack.size > 1) {
+                                    backStack.removeLastOrNull()
+                                }
+                            }
                         )
                     }
 
                     is NavigationGraph.NmeaLogs -> NavEntry(key = key) {
                         NmeaLogsScreen(
-                            app = app
+                            app = app,
+                            onBack = {
+                                if (backStack.size > 1) {
+                                    backStack.removeLastOrNull()
+                                }
+                            }
                         )
                     }
 
@@ -124,3 +133,5 @@ fun NavigationRoot(
         )
     }
 }
+
+private const val TAG = "NavigationRoot"
