@@ -49,7 +49,7 @@ fun LocationScreen(
             val coarseLocationGranted = result[Manifest.permission.ACCESS_COARSE_LOCATION] == true
 
             if (fineLocationGranted || coarseLocationGranted) {
-                viewModel.retrieveCachedLocation()
+                viewModel.onAnyLocationPermissionGranted()
             } else {
                 Toast.makeText(context, "Permissions not granted", Toast.LENGTH_SHORT).show()
             }

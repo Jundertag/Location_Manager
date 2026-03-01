@@ -70,7 +70,7 @@ class AppLocationManager(
 
     fun getAllProviders(): List<String> = locationManager.allProviders
 
-    fun notifyOnProviderChangeRequest() {
+    fun restartLocationFlow() {
         refreshRequests.tryEmit(Unit)
     }
 

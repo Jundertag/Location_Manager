@@ -2,15 +2,11 @@ package com.jayden.locationmanager.app.viewmodel
 
 import android.Manifest
 import android.location.LocationManager
-import android.util.Log
 import androidx.annotation.RequiresPermission
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jayden.locationmanager.data.repository.LocationRepo
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.onSubscription
 import kotlinx.coroutines.flow.stateIn
 
 class LocationViewModel(
@@ -35,7 +31,9 @@ class LocationViewModel(
     val allLocationProviders: List<String> = repo.getAllLocationProviders()
 
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
-    fun retrieveCachedLocation() = repo.getCachedLocation()
+    fun onAnyLocationPermissionGranted() {
+        repo.refreshLocationFlow()
+    }
 
     fun restartLocationFlow() {
         repo.refreshLocationFlow()

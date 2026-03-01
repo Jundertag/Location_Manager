@@ -17,9 +17,6 @@ class LocationRepo(
     private val source: AppLocationManager,
     private val context: Context
 ) {
-    @RequiresPermission(anyOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
-    fun getCachedLocation(): Coordinate? = source.getCachedLocation()?.toCoordinate()
-
     fun getAllLocationProviders(): List<String> = source.getAllProviders()
 
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
@@ -39,7 +36,7 @@ class LocationRepo(
     }
 
     fun refreshLocationFlow() {
-        source.notifyOnProviderChangeRequest()
+        source.restartLocationFlow()
     }
 }
 
