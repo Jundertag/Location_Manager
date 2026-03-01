@@ -40,13 +40,12 @@ import com.jayden.locationmanager.app.viewmodel.NmeaLogsViewModel
 fun NmeaLogsScreen(
     modifier: Modifier = Modifier,
     app: MainApp,
+    viewModel: NmeaLogsViewModel = viewModel(
+        factory = app.nmeaLogsViewModelFactory
+    ),
     onBack: () -> Unit
 ) {
     val context = LocalContext.current
-
-    val viewModel: NmeaLogsViewModel = viewModel(
-        factory = app.nmeaLogsViewModelFactory
-    )
 
     val logs = viewModel.pagingFlow.collectAsLazyPagingItems()
 

@@ -4,48 +4,36 @@ import android.Manifest
 import android.location.LocationManager
 import androidx.annotation.RequiresPermission
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.jayden.locationmanager.data.repository.LocationRepo
-import com.jayden.locationmanager.model.location.Coordinate
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.stateIn
 
 class LocationViewModel(
     private val repo: LocationRepo
 ) : ViewModel() {
-    private var _location: MutableStateFlow<Coordinate?> = MutableStateFlow(null)
-    val location = _location.asStateFlow()
-
-    @RequiresPermission(anyOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
-    fun retrieveCachedLocation() {
-        _location.value = repo.getCachedLocation()
-    }
 
     /**
-     * Retrieve live location.
-     *
-     * Requires any of [Manifest.permission.ACCESS_FINE_LOCATION], [Manifest.permission.ACCESS_COARSE_LOCATION] permissions
-     *
-     * @param sourceProvider The source provider
-     * @param minimumTimeMs Minimum time before refreshing location. (0 to update as fast as possible)
-     * @param minimumDistanceM Minimum distance before refreshing location. (0 to update without distance requirements)
+     * location will stay null if no permissions are granted
      */
-    @RequiresPermission(anyOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
-    fun retrieveLiveLocation(
-        sourceProvider: String = LocationManager.GPS_PROVIDER,
-        minimumTimeMs: Long = 1000L,
-        minimumDistanceM: Float = 0.0f,
-    ) {
-        repo.requestLiveLocationUpdates(
-            sourceProvider,
-            minimumTimeMs,
-            minimumDistanceM
-        ) { location ->
-            _location.value = location
-        }
-    }
+    fun locationFlow(
+        provider: String = LocationManager.GPS_PROVIDER,
+        minTimeMs: Long = 1000L,
+        minDistanceM: Float = 0.0f
+    ) = repo.locationUpdatesFlow(
+        provider,
+        minTimeMs,
+        minDistanceM
+    ).stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5_000),
+        null
+    )
 
-    /**
-     * Stop live location collection
-     */
-    fun stopLiveLocation() = repo.cancelLiveLocationUpdates()
+    val allLocationProviders: List<String> = repo.getAllLocationProviders()
+
+    @RequiresPermission(anyOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
+    fun retrieveCachedLocation() = repo.getCachedLocation()
 }

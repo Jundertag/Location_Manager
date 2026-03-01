@@ -5,9 +5,10 @@ import android.content.pm.PackageManager
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -15,13 +16,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.jayden.locationmanager.app.MainApp
+import com.jayden.locationmanager.app.ui.dialog.LocationProviderDialog
 import com.jayden.locationmanager.app.viewmodel.LocationViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -29,7 +35,7 @@ import com.jayden.locationmanager.app.viewmodel.LocationViewModel
 fun LocationScreen(
     modifier: Modifier = Modifier,
     app: MainApp,
-    onBack: () -> Unit
+    locationProvider: String,
 ) {
     val viewModel: LocationViewModel = viewModel(
         factory = app.locationViewModelFactory
@@ -48,27 +54,62 @@ fun LocationScreen(
             }
         }
 
+    val coarseLocationGranted by remember(context) { mutableStateOf(
+        ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        ) != PackageManager.PERMISSION_GRANTED)
+    }
+    val fineLocationGranted by remember(context) { mutableStateOf(
+        ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) != PackageManager.PERMISSION_GRANTED)
+    }
+
+    var requestedLocationProvider: String by remember { mutableStateOf(locationProvider) }
+    var showProviderDialog: Boolean by remember { mutableStateOf(false) }
+
+    val location by viewModel.locationFlow(
+        provider = requestedLocationProvider
+    ).collectAsStateWithLifecycle(
+        minActiveState = Lifecycle.State.RESUMED
+    )
+
+    LocationProviderDialog(
+        visible = showProviderDialog,
+        options = viewModel.allLocationProviders,
+        onConfirmSelection = {
+            requestedLocationProvider = it
+            showProviderDialog = false
+        },
+        onDismissDialog = {
+            showProviderDialog = false
+        }
+    )
+
     ElevatedCard(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
-            .clickable {
-                if (ContextCompat.checkSelfPermission(
-                        context,
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                    ) != PackageManager.PERMISSION_GRANTED
-                ) {
-                    permissionLauncher.launch(
-                        arrayOf(
-                            Manifest.permission.ACCESS_FINE_LOCATION,
-                            Manifest.permission.ACCESS_COARSE_LOCATION
+            .combinedClickable(
+                onClick = {
+                    if (!fineLocationGranted) {
+                        permissionLauncher.launch(
+                            arrayOf(
+                                Manifest.permission.ACCESS_FINE_LOCATION,
+                                Manifest.permission.ACCESS_COARSE_LOCATION
+                            )
                         )
-                    )
+                    }
+                },
+                onLongClick = {
+                    if (coarseLocationGranted) {
+                        showProviderDialog = true
+                    }
                 }
-            }
+            )
     ) {
-        val location by viewModel.location.collectAsStateWithLifecycle()
-
         val bearing = location?.let {
             if (it.bearing == null) {
                 if (ContextCompat.checkSelfPermission(
@@ -84,22 +125,13 @@ fun LocationScreen(
             }
         }
 
-        if (ContextCompat.checkSelfPermission(
-                context,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            viewModel.retrieveCachedLocation()
-            viewModel.retrieveLiveLocation()
-        }
-
         Text(
             "Current Location",
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier
                 .padding(12.dp)
         )
-        Spacer(Modifier)
+        Spacer(Modifier.height(2.dp))
         if (location == null) {
             val unavailableReason = when {
                 ContextCompat.checkSelfPermission(
@@ -115,6 +147,12 @@ fun LocationScreen(
                     .padding(horizontal = 12.dp)
             )
         } else {
+            Text(
+                "provider: ${location!!.provider ?: "unknown"}",
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier
+                    .padding(horizontal = 12.dp)
+            )
             Text(
                 "latitude: ${location!!.latitude}°",
                 style = MaterialTheme.typography.bodyMedium,

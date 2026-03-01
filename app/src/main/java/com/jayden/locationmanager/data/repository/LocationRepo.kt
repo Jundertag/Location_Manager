@@ -1,25 +1,19 @@
 package com.jayden.locationmanager.data.repository
 
 import android.Manifest
+import android.location.Location
 import android.location.LocationManager
 import androidx.annotation.RequiresPermission
 import com.jayden.locationmanager.model.location.Coordinate
 import com.jayden.locationmanager.data.source.AppLocationManager
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class LocationRepo(
     private val source: AppLocationManager
 ) {
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
-    fun getCachedLocation(): Coordinate? {
-        val rawLocation = source.getCachedLocation() ?: return null
-
-        return Coordinate(
-            latitude = rawLocation.latitude,
-            longitude = rawLocation.longitude,
-            bearing = if (rawLocation.hasBearing()) rawLocation.bearing else null,
-            provider = rawLocation.provider
-        )
-    }
+    fun getCachedLocation(): Coordinate? = source.getCachedLocation()?.toCoordinate()
 
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
     fun requestSingleLocationUpdate(
@@ -27,12 +21,7 @@ class LocationRepo(
         onLocationUpdate: ((Coordinate) -> Unit)
     ) {
         source.requestSingleLocationUpdate(provider) { location ->
-            onLocationUpdate(Coordinate(
-                location.latitude,
-                location.longitude,
-                location.bearing,
-                location.provider
-            ))
+            onLocationUpdate(location.toCoordinate())
         }
     }
 
@@ -48,9 +37,18 @@ class LocationRepo(
             minTimeMs,
             minDistanceM,
         ) { location ->
-            onLocationUpdate(Coordinate(latitude = location.latitude, longitude = location.longitude, bearing = location.bearing, provider = location.provider))
+            onLocationUpdate(location.toCoordinate())
         }
     }
 
-    fun cancelLiveLocationUpdates() = source.cancelLiveLocationUpdates()
+    fun getAllLocationProviders(): List<String> = source.getAllProviders()
+
+    @Suppress("MissingPermission")
+    fun locationUpdatesFlow(
+        provider: String = LocationManager.GPS_PROVIDER,
+        minTimeMs: Long = 1000L,
+        minDistanceM: Float = 0.0f
+    ): Flow<Coordinate> = source.locationUpdatesFlow(provider, minTimeMs, minDistanceM).map { it.toCoordinate() }
 }
+
+fun Location.toCoordinate(): Coordinate = Coordinate(latitude = this.latitude, longitude = this.longitude, bearing = this.bearing, provider = this.provider)
