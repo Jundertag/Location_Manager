@@ -5,9 +5,13 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import androidx.annotation.RequiresPermission
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.onStart
 
 class AppLocationManager(
     private val locationManager: LocationManager
@@ -15,6 +19,11 @@ class AppLocationManager(
     val gpsProvider = LocationManager.GPS_PROVIDER
 
     private var locationListener: LocationListener? = null
+
+    private val refreshRequests = MutableSharedFlow<Unit>(
+        replay = 0,
+        extraBufferCapacity = 1
+    )
 
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
     fun getCachedLocation(): Location? {
@@ -61,27 +70,38 @@ class AppLocationManager(
 
     fun getAllProviders(): List<String> = locationManager.allProviders
 
+    fun notifyOnProviderChangeRequest() {
+        refreshRequests.tryEmit(Unit)
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
     fun locationUpdatesFlow(
         provider: String,
         minTimeMs: Long,
         minDistanceM: Float,
-    ): Flow<Location> = callbackFlow {
-        locationManager.getLastKnownLocation(provider)?.let {
-            trySend(it)
-        }
-        locationListener = LocationListener { location -> trySend(location) }
-        locationManager.requestLocationUpdates(
-            provider,
-            minTimeMs,
-            minDistanceM,
-            locationListener!!
-        )
-        awaitClose {
-            locationListener?.let {
-                locationManager.removeUpdates(it)
+    ): Flow<Location> {
+        return refreshRequests.onStart {
+            emit(Unit)
+        }.flatMapLatest {
+            callbackFlow {
+                locationManager.getLastKnownLocation(provider)?.let {
+                    trySend(it)
+                }
+                locationListener = LocationListener { location -> trySend(location) }
+                locationManager.requestLocationUpdates(
+                    provider,
+                    minTimeMs,
+                    minDistanceM,
+                    locationListener!!
+                )
+                awaitClose {
+                    locationListener?.let {
+                        locationManager.removeUpdates(it)
+                    }
+                    locationListener = null
+                }
             }
-            locationListener = null
         }
     }
 }

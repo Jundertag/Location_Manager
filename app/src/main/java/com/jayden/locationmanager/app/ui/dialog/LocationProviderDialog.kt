@@ -20,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -28,7 +29,7 @@ import androidx.compose.ui.window.DialogProperties
 @Composable
 fun LocationProviderDialog(
     visible: Boolean,
-    title: @Composable () -> Unit = { Text("Select Provider", style = MaterialTheme.typography.titleMedium) },
+    title: String = "Select Provider",
     options: List<String>,
     initialSelection: String? = null,
     onConfirmSelection: ((String) -> Unit),
@@ -40,20 +41,24 @@ fun LocationProviderDialog(
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(375.dp)
+                    .heightIn(min = 320.dp, max = 600.dp)
                     .padding(16.dp)
             ) {
-                title()
-                Spacer(Modifier.height(4.dp))
+                Text(
+                    title,
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.padding(16.dp)
+                )
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp)
-                        .heightIn(max = 320.dp)
+                        .padding(horizontal = 16.dp)
+                        .heightIn(max = 520.dp)
                 ) {
                     items(options) { option ->
                         Row(
-                            modifier = Modifier.padding(vertical = 8.dp)
+                            modifier = Modifier.padding(vertical = 4.dp),
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             RadioButton(
                                 selected = (selected == option),
@@ -68,17 +73,17 @@ fun LocationProviderDialog(
                 }
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
+                    horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     TextButton(
                         onClick = onDismissDialog,
-                        modifier = Modifier.padding(8.dp)
-                    ) { Text("dismiss") }
+                        modifier = Modifier.padding(4.dp)
+                    ) { Text("dismiss", style = MaterialTheme.typography.bodyMedium) }
                     TextButton(
                         enabled = (selected != null),
                         onClick = { onConfirmSelection(selected!!) },
-                        modifier = Modifier.padding(8.dp)
-                    ) { Text("confirm") }
+                        modifier = Modifier.padding(4.dp)
+                    ) { Text("confirm", style = MaterialTheme.typography.bodyMedium) }
                 }
             }
         }

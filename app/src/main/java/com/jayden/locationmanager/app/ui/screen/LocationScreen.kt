@@ -80,9 +80,11 @@ fun LocationScreen(
     LocationProviderDialog(
         visible = showProviderDialog,
         options = viewModel.allLocationProviders,
+        initialSelection = requestedLocationProvider,
         onConfirmSelection = {
             requestedLocationProvider = it
             showProviderDialog = false
+            viewModel.restartLocationFlow()
         },
         onDismissDialog = {
             showProviderDialog = false
@@ -105,9 +107,7 @@ fun LocationScreen(
                     }
                 },
                 onLongClick = {
-                    if (coarseLocationGranted) {
-                        showProviderDialog = true
-                    }
+                    showProviderDialog = true
                 }
             )
     ) {

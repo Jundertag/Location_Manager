@@ -49,6 +49,10 @@ class LocationRepo(
         minTimeMs: Long = 1000L,
         minDistanceM: Float = 0.0f
     ): Flow<Coordinate> = source.locationUpdatesFlow(provider, minTimeMs, minDistanceM).map { it.toCoordinate() }
+
+    fun refreshLocationFlow() {
+        source.notifyOnProviderChangeRequest()
+    }
 }
 
 fun Location.toCoordinate(): Coordinate = Coordinate(latitude = this.latitude, longitude = this.longitude, bearing = this.bearing, provider = this.provider)
