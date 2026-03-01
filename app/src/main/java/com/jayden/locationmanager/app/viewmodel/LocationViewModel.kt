@@ -23,18 +23,14 @@ class LocationViewModel(
         minTimeMs: Long = 1000L,
         minDistanceM: Float = 0.0f
     ) = repo.locationUpdatesFlow(
-        provider,
-        minTimeMs,
-        minDistanceM
-    ).stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(5_000),
-        null
-    ).also {
-        it.onSubscription {
-            Log.d(TAG, "subscribed to location flow")
-        }
-    }
+            provider,
+            minTimeMs,
+            minDistanceM
+        ).stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5_000),
+            null
+        )
 
     val allLocationProviders: List<String> = repo.getAllLocationProviders()
 

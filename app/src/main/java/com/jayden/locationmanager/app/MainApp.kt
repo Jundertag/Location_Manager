@@ -40,7 +40,7 @@ class MainApp : Application() {
         val locationManager = applicationContext.getSystemService(LocationManager::class.java)
 
         appLocationManager = AppLocationManager(locationManager)
-        locationRepo = LocationRepo(appLocationManager)
+        locationRepo = LocationRepo(appLocationManager, applicationContext)
         mainViewModelFactory = MainViewModelFactory(locationRepo)
         locationViewModelFactory = LocationViewModelFactory(locationRepo)
         nmeaLogsListener = AppNmeaLogsListener(applicationContext, locationManager)
