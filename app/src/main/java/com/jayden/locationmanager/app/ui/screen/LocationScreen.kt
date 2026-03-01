@@ -59,13 +59,13 @@ fun LocationScreen(
         ContextCompat.checkSelfPermission(
             context,
             Manifest.permission.ACCESS_COARSE_LOCATION
-        ) != PackageManager.PERMISSION_GRANTED)
+        ) == PackageManager.PERMISSION_GRANTED)
     }
     val fineLocationGranted by remember(context) { mutableStateOf(
         ContextCompat.checkSelfPermission(
             context,
             Manifest.permission.ACCESS_FINE_LOCATION
-        ) != PackageManager.PERMISSION_GRANTED)
+        ) == PackageManager.PERMISSION_GRANTED)
     }
 
     var requestedLocationProvider: String by remember { mutableStateOf(locationProvider) }
@@ -116,7 +116,7 @@ fun LocationScreen(
                 if (ContextCompat.checkSelfPermission(
                         context,
                         Manifest.permission.ACCESS_COARSE_LOCATION
-                ) == PackageManager.PERMISSION_GRANTED) {
+                ) != PackageManager.PERMISSION_GRANTED) {
                     "not available (need precise location)"
                 } else {
                     "not available (not reported by hardware)" // assume not available

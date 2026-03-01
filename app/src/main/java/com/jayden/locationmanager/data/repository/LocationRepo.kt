@@ -43,7 +43,7 @@ class LocationRepo(
 
     fun getAllLocationProviders(): List<String> = source.getAllProviders()
 
-    @Suppress("MissingPermission")
+    @RequiresPermission(anyOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
     fun locationUpdatesFlow(
         provider: String = LocationManager.GPS_PROVIDER,
         minTimeMs: Long = 1000L,
