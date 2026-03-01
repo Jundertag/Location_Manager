@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -68,7 +69,7 @@ fun LocationScreen(
     }
 
     var requestedLocationProvider: String by remember { mutableStateOf(locationProvider) }
-    var showProviderDialog: Boolean by remember { mutableStateOf(false) }
+    var showProviderDialog: Boolean by rememberSaveable { mutableStateOf(false) }
 
     val location by viewModel.locationFlow(
         provider = requestedLocationProvider

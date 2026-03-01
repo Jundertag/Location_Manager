@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
@@ -33,47 +34,52 @@ fun LocationProviderDialog(
     onConfirmSelection: ((String) -> Unit),
     onDismissDialog: () -> Unit
 ) {
-    if (!visible) return
-
-    var selected: String? by remember { mutableStateOf(initialSelection) }
-
-    Dialog(onDismissRequest = onDismissDialog) {
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(375.dp)
-                .padding(16.dp)
-        ) {
-            title()
-            Spacer(Modifier.height(4.dp))
-            LazyColumn(
+    var selected: String? by remember(visible, initialSelection) { mutableStateOf(initialSelection) }
+    if (visible) {
+        Dialog(onDismissRequest = onDismissDialog) {
+            Card(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .height(375.dp)
                     .padding(16.dp)
-                    .heightIn(max = 320.dp)
             ) {
-                items(options) { option ->
-                    RadioButton(
-                        selected = (selected == option),
-                        onClick = {
-                            selected = option
+                title()
+                Spacer(Modifier.height(4.dp))
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                        .heightIn(max = 320.dp)
+                ) {
+                    items(options) { option ->
+                        Row(
+                            modifier = Modifier.padding(vertical = 8.dp)
+                        ) {
+                            RadioButton(
+                                selected = (selected == option),
+                                onClick = {
+                                    selected = option
+                                }
+                            )
+                            Spacer(Modifier.width(8.dp))
+                            Text(option)
                         }
-                    )
+                    }
                 }
-            }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                TextButton(
-                    onClick = onDismissDialog,
-                    modifier = Modifier.padding(8.dp)
-                ) { Text("dismiss") }
-                TextButton(
-                    enabled = (selected != null),
-                    onClick = { onConfirmSelection(selected!!) },
-                    modifier = Modifier.padding(8.dp)
-                ) { Text("confirm") }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    TextButton(
+                        onClick = onDismissDialog,
+                        modifier = Modifier.padding(8.dp)
+                    ) { Text("dismiss") }
+                    TextButton(
+                        enabled = (selected != null),
+                        onClick = { onConfirmSelection(selected!!) },
+                        modifier = Modifier.padding(8.dp)
+                    ) { Text("confirm") }
+                }
             }
         }
     }
