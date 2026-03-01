@@ -80,13 +80,17 @@ class AppLocationManager(
         provider: String,
         minTimeMs: Long,
         minDistanceM: Float,
-    ): Flow<Location> {
+    ): Flow<Location?> {
         return refreshRequests.onStart {
             emit(Unit)
         }.flatMapLatest {
             callbackFlow {
-                locationManager.getLastKnownLocation(provider)?.let {
-                    trySend(it)
+                try {
+                    locationManager.getLastKnownLocation(provider)?.let {
+                        trySend(it)
+                    }
+                } catch (_: SecurityException) {
+                    trySend(null)
                 }
                 locationListener = LocationListener { location -> trySend(location) }
                 locationManager.requestLocationUpdates(

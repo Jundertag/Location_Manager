@@ -17,9 +17,7 @@ class LocationViewModel(
     private val repo: LocationRepo
 ) : ViewModel() {
 
-    /**
-     * location will stay null if no permissions are granted
-     */
+    @RequiresPermission(anyOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
     fun locationFlow(
         provider: String = LocationManager.GPS_PROVIDER,
         minTimeMs: Long = 1000L,

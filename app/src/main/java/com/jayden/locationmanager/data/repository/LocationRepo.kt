@@ -48,7 +48,7 @@ class LocationRepo(
         provider: String = LocationManager.GPS_PROVIDER,
         minTimeMs: Long = 1000L,
         minDistanceM: Float = 0.0f
-    ): Flow<Coordinate> = source.locationUpdatesFlow(provider, minTimeMs, minDistanceM).map { it.toCoordinate() }
+    ): Flow<Coordinate?> = source.locationUpdatesFlow(provider, minTimeMs, minDistanceM).map { it?.toCoordinate() }
 
     fun refreshLocationFlow() {
         source.notifyOnProviderChangeRequest()
