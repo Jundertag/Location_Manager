@@ -204,6 +204,28 @@ sealed interface NmeaMessage {
         val signalId: Int?,
         val checksum: UByte?
     ) : NmeaMessage
+    data class GsvEvent(
+        val gsvSentencesToSend: Long?,
+        val sentenceNumber: Int?,
+        val satellitesInView: Int?,
+        val satellite1PrnNumber: Int?,
+        val satellite1ElevationDegrees: Double?,
+        val satellite1AzimuthDegrees: Double?,
+        val satellite1Snr: Double?,
+        val satellite2PrnNumber: Int?,
+        val satellite2ElevationDegrees: Double?,
+        val satellite2AzimuthDegrees: Double?,
+        val satellite2Snr: Double?,
+        val satellite3PrnNumber: Int?,
+        val satellite3ElevationDegrees: Double?,
+        val satellite3AzimuthDegrees: Double?,
+        val satellite3Snr: Double?,
+        val satellite4PrnNumber: Int?,
+        val satellite4ElevationDegrees: Double?,
+        val satellite4AzimuthDegrees: Double?,
+        val satellite4Snr: Double?,
+        val checksum: UByte?
+    ) : NmeaMessage
     data class ProprietaryEvent(
         val raw: String
     ) : NmeaMessage

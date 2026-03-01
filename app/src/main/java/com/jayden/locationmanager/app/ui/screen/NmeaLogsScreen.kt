@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,8 +18,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberOverscrollEffect
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -76,34 +79,64 @@ fun NmeaLogsScreen(
     if (fineLocationGranted) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            state = lazyListState
+            state = lazyListState,
         ) {
             items(
                 count = logs.itemCount,
-                key = logs.itemKey { it.id }
+                key = logs.itemKey { it.id },
+                contentType = { index ->
+                    val item = logs[index]
+                    when {
+                        item == null -> "placeholder"
+                        else -> "event"
+                    }
+                }
             ) { index ->
-                val log = logs[index]!!
-                val event = log.toUi()
+                val log = logs[index]
 
-                ElevatedCard(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
-                ) {
-                    Column(
-                        modifier = Modifier.padding(12.dp)
+                if (log == null) {
+                    ElevatedCard(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
                     ) {
-                        Text(
-                            log.getPrettySentenceType(),
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                        Text(log.talkerId.toString(),
-                            style = MaterialTheme.typography.bodyMedium
-                        )
+                        Box(
+                            modifier = Modifier.height(72.dp).fillMaxWidth()
+                        ) {
+                            LinearProgressIndicator(
+                                modifier = Modifier.fillMaxWidth().align(Alignment.TopCenter)
+                            )
 
-                        Spacer(Modifier.height(8.dp))
-                        event.fields.forEach { field ->
-                            Text(field.toString(), style = MaterialTheme.typography.bodySmall)
+                            Text(
+                                "Loading",
+                                modifier = Modifier.align(Alignment.TopStart),
+                                style = MaterialTheme.typography.titleLarge
+                            )
+                        }
+                    }
+                } else {
+                    val event = log.toUi()
+                    ElevatedCard(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(12.dp)
+                        ) {
+                            Text(
+                                log.getPrettySentenceType(),
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                            Text(
+                                log.talkerId.toString(),
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+
+                            Spacer(Modifier.height(8.dp))
+                            event.fields.forEach { field ->
+                                Text(field.toString(), style = MaterialTheme.typography.bodySmall)
+                            }
                         }
                     }
                 }
