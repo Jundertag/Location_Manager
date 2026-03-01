@@ -147,8 +147,9 @@ object TypeConverter {
         }
     }
 
-    fun String.toNmeaEvent(): NmeaEvent {
+    fun String.toNmeaEvent(id: Long): NmeaEvent {
         return NmeaEvent(
+            id = id,
             talkerId = getTalkerId(this),
             sentenceType = getSentenceType(this),
             message = NmeaMessage.RawEvent(this)

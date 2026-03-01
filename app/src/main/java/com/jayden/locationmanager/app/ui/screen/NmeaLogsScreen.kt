@@ -15,11 +15,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberOverscrollEffect
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemKey
 import com.jayden.locationmanager.app.MainApp
 import com.jayden.locationmanager.app.ui.model.nmea.UiTypeConverter.toUi
 import com.jayden.locationmanager.app.viewmodel.NmeaLogsViewModel
@@ -67,12 +71,16 @@ fun NmeaLogsScreen(
         viewModel.initializeNmeaLogging()
     }
 
+    val lazyListState = rememberLazyListState()
+
     if (fineLocationGranted) {
         LazyColumn(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
+            state = lazyListState
         ) {
             items(
-                logs.itemCount
+                count = logs.itemCount,
+                key = logs.itemKey { it.id }
             ) { index ->
                 val log = logs[index]!!
                 val event = log.toUi()
