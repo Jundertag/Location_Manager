@@ -201,6 +201,13 @@ object UiTypeConverter {
                 NmeaFieldUi(name = "Checksum", value = this.message.checksum?.toString()),
             ))
         }
+        is NmeaMessage.GsvEvent -> {
+            NmeaMessageUi(title = this.getPrettySentenceType(), talkerId = talkerId, fields = listOf(
+                NmeaFieldUi(name = "GSV sentences to send", value = this.message.gsvSentencesToSend?.toString()),
+                NmeaFieldUi(name = "", value = null),
+                NmeaFieldUi(name = "Checksum", value = this.message.checksum?.toString()),
+            ))
+        }
         is NmeaMessage.ProprietaryEvent -> {
             NmeaMessageUi(title = this.getPrettySentenceType(), talkerId = talkerId, fields = listOf(
                 NmeaFieldUi(name = "Raw", value = this.message.raw),

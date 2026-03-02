@@ -7,9 +7,17 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,28 +27,38 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberOverscrollEffect
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ElevatedAssistChip
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SnapshotMutationPolicy
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.referentialEqualityPolicy
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.compose.rememberLifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import com.jayden.locationmanager.app.MainApp
 import com.jayden.locationmanager.app.ui.model.nmea.UiTypeConverter.toUi
 import com.jayden.locationmanager.app.viewmodel.NmeaLogsViewModel
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -74,70 +92,126 @@ fun NmeaLogsScreen(
         viewModel.initializeNmeaLogging()
     }
 
-    val lazyListState = rememberLazyListState()
+    val lazyListState = rememberLazyListState(
+        logs.itemCount
+    )
+
+    val isAtBottom by remember {
+        derivedStateOf {
+            val layoutInfo = lazyListState.layoutInfo
+            val totalItems = layoutInfo.totalItemsCount
+            val lastVisible = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+            lastVisible >= totalItems - 1
+        }
+    }
+
+    val lifecycleOwner = rememberLifecycleOwner()
 
     if (fineLocationGranted) {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            state = lazyListState,
-        ) {
-            items(
-                count = logs.itemCount,
-                key = logs.itemKey { it.id },
-                contentType = { index ->
-                    val item = logs[index]
-                    when {
-                        item == null -> "placeholder"
-                        else -> "event"
-                    }
-                }
-            ) { index ->
-                val log = logs[index]
-
-                if (log == null) {
-                    ElevatedCard(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
-                    ) {
-                        Box(
-                            modifier = Modifier.height(72.dp).fillMaxWidth()
-                        ) {
-                            LinearProgressIndicator(
-                                modifier = Modifier.fillMaxWidth().align(Alignment.TopCenter)
-                            )
-
-                            Text(
-                                "Loading",
-                                modifier = Modifier.align(Alignment.TopStart),
-                                style = MaterialTheme.typography.titleLarge
-                            )
+        Box(Modifier.fillMaxSize()) {
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth(),
+                state = lazyListState,
+            ) {
+                items(
+                    count = logs.itemCount,
+                    key = logs.itemKey { it.id },
+                    contentType = { index ->
+                        val item = logs.peek(index)
+                        when {
+                            item == null -> "placeholder"
+                            else -> "event"
                         }
                     }
-                } else {
-                    val event = log.toUi()
-                    ElevatedCard(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(12.dp)
-                        ) {
-                            Text(
-                                log.getPrettySentenceType(),
-                                style = MaterialTheme.typography.titleMedium
-                            )
-                            Text(
-                                log.talkerId.toString(),
-                                style = MaterialTheme.typography.bodyMedium
-                            )
+                ) { index ->
+                    val log = logs[index]
 
-                            Spacer(Modifier.height(8.dp))
-                            event.fields.forEach { field ->
-                                Text(field.toString(), style = MaterialTheme.typography.bodySmall)
+                    if (log == null) {
+                        ElevatedCard(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .height(72.dp)
+                                    .fillMaxWidth()
+                            ) {
+                                LinearProgressIndicator(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .align(Alignment.TopCenter)
+                                )
+
+                                Text(
+                                    "Loading",
+                                    modifier = Modifier.align(Alignment.TopStart),
+                                    style = MaterialTheme.typography.titleLarge
+                                )
                             }
                         }
+                    } else {
+                        val event = log.toUi()
+                        ElevatedCard(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
+                        ) {
+                            Column(
+                                modifier = Modifier.padding(12.dp)
+                            ) {
+                                Text(
+                                    log.getPrettySentenceType(),
+                                    style = MaterialTheme.typography.titleMedium
+                                )
+                                Text(
+                                    log.talkerId.toString(),
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+
+                                Spacer(Modifier.height(8.dp))
+                                event.fields.forEach { field ->
+                                    Text(
+                                        field.toString(),
+                                        style = MaterialTheme.typography.bodySmall
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            AnimatedVisibility(
+                visible = !isAtBottom,
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(16.dp),
+                enter = slideInVertically {
+                    -40
+                } + expandVertically(
+                    expandFrom = Alignment.Bottom
+                ) + fadeIn(
+                    initialAlpha = 0.3f
+                ),
+                exit = slideOutVertically {
+                    -40
+                } + shrinkVertically() + fadeOut()
+            ) {
+                Surface(
+                    tonalElevation = 6.dp,
+                    shape = MaterialTheme.shapes.extraLarge
+                ) {
+                    TextButton(
+                        onClick = {
+                            lifecycleOwner.lifecycleScope.launch {
+                                lazyListState.scrollToItem(
+                                    lazyListState.layoutInfo.totalItemsCount
+                                )
+                            }
+                        }
+                    ) {
+                        Text("Jump to Newest Logs")
                     }
                 }
             }
