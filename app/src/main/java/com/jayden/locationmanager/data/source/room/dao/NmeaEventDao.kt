@@ -20,7 +20,7 @@ interface NmeaEventDao {
 
     @Query("""
         SELECT * FROM nmea_events
-        ORDER BY timestamp DESC, id DESC
+        ORDER BY timestamp ASC, id ASC
     """)
     fun pagingSource(): PagingSource<Int, NmeaEventEntity>
 
