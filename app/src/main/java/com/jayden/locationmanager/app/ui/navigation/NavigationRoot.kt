@@ -112,6 +112,7 @@ fun NavigationRoot(
 
                 is NavigationGraph.NmeaLogs -> NavEntry(key = key) {
                     NmeaLogsScreen(
+                        viewModel = viewModel
                     )
                 }
 

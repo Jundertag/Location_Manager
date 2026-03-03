@@ -49,7 +49,5 @@ fun NmeaLogsScreen(
     modifier: Modifier = Modifier,
     viewModel: MainViewModel
 ) {
-    val context = LocalContext.current
-
-    val logs = TODO("logs")
+    TODO("implement NmeaLogsScreen")
 }
