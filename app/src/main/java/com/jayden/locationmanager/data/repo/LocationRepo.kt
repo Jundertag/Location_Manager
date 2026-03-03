@@ -2,10 +2,14 @@ package com.jayden.locationmanager.data.repo
 
 import android.Manifest
 import androidx.annotation.RequiresPermission
+import com.jayden.locationmanager.data.model.Coordinate
+import com.jayden.locationmanager.data.model.toCoordinate
 import com.jayden.locationmanager.data.source.AppLocationManager
 import com.jayden.locationmanager.data.source.AppNmeaLogsManager
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
 import javax.inject.Inject
 
@@ -19,11 +23,13 @@ class LocationRepo @Inject constructor(
         provider: String,
         minTimeMs: Long,
         minDistanceM: Float
-    ) = appLocationManager.locationUpdatesFlow(
+    ): SharedFlow<Coordinate> = appLocationManager.locationUpdatesFlow(
         provider,
         minTimeMs,
         minDistanceM
-    ).shareIn(
+    ).map {
+        it.toCoordinate()
+    }.shareIn(
         scope,
         started = SharingStarted.WhileSubscribed(5_000),
         replay = 0

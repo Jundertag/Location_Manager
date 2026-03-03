@@ -45,7 +45,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import com.jayden.locationmanager.app.MainApp
-import com.jayden.locationmanager.app.viewmodel.NmeaLogsViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
