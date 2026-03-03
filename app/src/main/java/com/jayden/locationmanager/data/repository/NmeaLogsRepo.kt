@@ -26,7 +26,7 @@ class NmeaLogsRepo @Inject constructor(
     ).flow
         .map { pagingData ->
             pagingData.map { entity ->
-                entity.event.toNmeaEvent(entity.id)
+                entity.event
             }
         }
     suspend fun deleteOlder(time: Long): Int = dao.deleteOld(time)
