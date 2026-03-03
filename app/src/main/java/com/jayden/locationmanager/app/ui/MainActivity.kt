@@ -6,7 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.jayden.locationmanager.app.MainApp
 import com.jayden.locationmanager.app.ui.navigation.NavigationRoot
 import com.jayden.locationmanager.app.ui.theme.AppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
