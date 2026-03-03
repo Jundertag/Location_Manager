@@ -26,7 +26,6 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.jayden.locationmanager.R
-import com.jayden.locationmanager.app.MainApp
 import com.jayden.locationmanager.app.ui.screen.LocationScreen
 import com.jayden.locationmanager.app.ui.screen.NmeaLogsScreen
 import com.jayden.locationmanager.app.viewmodel.MainViewModel
@@ -35,7 +34,6 @@ import com.jayden.locationmanager.app.viewmodel.MainViewModel
 @Composable
 fun NavigationRoot(
     modifier: Modifier = Modifier,
-    app: MainApp,
 ) {
     val backStack = rememberNavBackStack(
         NavigationGraph.Location
