@@ -19,6 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.rememberNavBackStack
@@ -28,6 +29,7 @@ import com.jayden.locationmanager.R
 import com.jayden.locationmanager.app.MainApp
 import com.jayden.locationmanager.app.ui.screen.LocationScreen
 import com.jayden.locationmanager.app.ui.screen.NmeaLogsScreen
+import com.jayden.locationmanager.app.viewmodel.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,6 +43,7 @@ fun NavigationRoot(
 
     var locationProvider by remember { mutableStateOf(LocationManager.GPS_PROVIDER) }
 
+    val viewModel: MainViewModel = hiltViewModel()
     Scaffold(
         topBar = {
             TopAppBar(title = { Text("${backStack.last()}", style = MaterialTheme.typography.titleLarge) })
@@ -103,13 +106,12 @@ fun NavigationRoot(
                 is NavigationGraph.Location -> NavEntry(key = key) {
                     LocationScreen(
                         locationProvider = locationProvider,
+                        viewModel = viewModel
                     )
                 }
 
                 is NavigationGraph.NmeaLogs -> NavEntry(key = key) {
                     NmeaLogsScreen(
-                        app = app,
-                        onBack = {}
                     )
                 }
 
