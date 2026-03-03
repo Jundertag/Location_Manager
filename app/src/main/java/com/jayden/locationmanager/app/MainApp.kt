@@ -12,14 +12,6 @@ import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
 class MainApp : Application() {
-    lateinit var mainViewModelFactory: MainViewModelFactory
-        private set
-    lateinit var locationViewModelFactory: LocationViewModelFactory
-        private set
-    lateinit var nmeaLogsViewModelFactory: NmeaLogsViewModelFactory
-        private set
-
-
     override fun onCreate() {
         super.onCreate()
     }
