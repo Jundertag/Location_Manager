@@ -5,10 +5,9 @@ import androidx.annotation.RequiresPermission
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.map
-import com.jayden.locationmanager.data.source.AppNmeaLogsListener
 import com.jayden.locationmanager.data.local.NmeaEventDao
 import com.jayden.locationmanager.data.local.NmeaEventEntity
-import com.jayden.locationmanager.model.nmea.typeconverter.TypeConverter.toNmeaEvent
+import com.jayden.locationmanager.data.source.AppNmeaLogsListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch

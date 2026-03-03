@@ -7,7 +7,7 @@ import android.location.Location
 import android.location.LocationManager
 import androidx.annotation.RequiresPermission
 import androidx.core.content.ContextCompat
-import com.jayden.locationmanager.model.location.Coordinate
+import com.jayden.locationmanager.data.model.Coordinate
 import com.jayden.locationmanager.data.source.AppLocationManager
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
