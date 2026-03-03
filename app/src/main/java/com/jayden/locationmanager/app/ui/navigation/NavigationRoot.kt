@@ -42,10 +42,6 @@ fun NavigationRoot(
         NavigationGraph.Location
     )
 
-    val viewModel: MainViewModel = viewModel(
-        factory = app.mainViewModelFactory
-    )
-
     var locationProvider by remember { mutableStateOf(LocationManager.GPS_PROVIDER) }
 
     Scaffold(
