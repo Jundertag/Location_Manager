@@ -99,47 +99,7 @@ fun NmeaLogsScreen(
                 modifier = Modifier.fillMaxWidth(),
                 state = lazyListState,
             ) {
-                items(
-                    count = logs.itemCount,
-                    key = logs.itemKey { it.id },
-                    contentType = { index ->
-                        val item = logs.peek(index)
-                        when {
-                            item == null -> "placeholder"
-                            else -> "event"
-                        }
-                    }
-                ) { index ->
-                    val log = logs[index]
-
-                    if (log == null) {
-                        ElevatedCard(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .height(72.dp)
-                                    .fillMaxWidth()
-                            ) {
-                                LinearProgressIndicator(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .align(Alignment.TopCenter)
-                                )
-
-                                Text(
-                                    "Loading",
-                                    modifier = Modifier.align(Alignment.TopStart),
-                                    style = MaterialTheme.typography.titleLarge
-                                )
-                            }
-                        }
-                    } else {
-                        // FIXME: Render raw logs for compatibility
-                    }
-                }
+                // TODO: New log screen implementation
             }
 
             AnimatedVisibility(
