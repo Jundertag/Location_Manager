@@ -1,4 +1,4 @@
-package com.jayden.locationmanager.data.source.room.entity
+package com.jayden.locationmanager.data.local
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

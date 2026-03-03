@@ -4,8 +4,8 @@ import android.content.Context
 import android.location.LocationManager
 import androidx.room.Room
 import com.jayden.locationmanager.data.source.AppLocationManager
-import com.jayden.locationmanager.data.source.room.NmeaLogsDatabase
-import com.jayden.locationmanager.data.source.room.dao.NmeaEventDao
+import com.jayden.locationmanager.data.local.NmeaLogsDatabase
+import com.jayden.locationmanager.data.local.NmeaEventDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -35,6 +35,5 @@ object AppModule {
     fun provideNmeaLogsDao(
         database: NmeaLogsDatabase
     ): NmeaEventDao = database.nmeaEventDao()
-
 
 }

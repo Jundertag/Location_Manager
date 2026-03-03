@@ -1,9 +1,9 @@
-package com.jayden.locationmanager.data.source.room
+package com.jayden.locationmanager.data.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.jayden.locationmanager.data.source.room.dao.NmeaEventDao
-import com.jayden.locationmanager.data.source.room.entity.NmeaEventEntity
+import com.jayden.locationmanager.data.local.NmeaEventDao
+import com.jayden.locationmanager.data.local.NmeaEventEntity
 
 @Database(
     version = 1,

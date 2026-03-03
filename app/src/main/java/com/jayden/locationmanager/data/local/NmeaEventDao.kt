@@ -1,11 +1,11 @@
-package com.jayden.locationmanager.data.source.room.dao
+package com.jayden.locationmanager.data.local
 
 import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import com.jayden.locationmanager.data.source.room.entity.NmeaEventEntity
+import com.jayden.locationmanager.data.local.NmeaEventEntity
 
 @Dao
 interface NmeaEventDao {
