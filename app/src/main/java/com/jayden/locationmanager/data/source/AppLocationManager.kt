@@ -12,8 +12,9 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.onStart
+import javax.inject.Inject
 
-class AppLocationManager(
+class AppLocationManager @Inject constructor(
     private val locationManager: LocationManager
 ) {
     val gpsProvider = LocationManager.GPS_PROVIDER

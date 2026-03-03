@@ -9,13 +9,15 @@ import androidx.annotation.RequiresPermission
 import androidx.core.content.ContextCompat
 import com.jayden.locationmanager.model.location.Coordinate
 import com.jayden.locationmanager.data.source.AppLocationManager
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class LocationRepo(
+class LocationRepo @Inject constructor(
     private val source: AppLocationManager,
-    private val context: Context
+    @param:ApplicationContext val context: Context
 ) {
     fun getAllLocationProviders(): List<String> = source.getAllProviders()
 

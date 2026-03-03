@@ -35,12 +35,10 @@ import com.jayden.locationmanager.app.viewmodel.LocationViewModel
 @Composable
 fun LocationScreen(
     modifier: Modifier = Modifier,
+    viewModel: LocationViewModel = hiltViewModel(),
     app: MainApp,
     locationProvider: String,
 ) {
-    val viewModel: LocationViewModel = viewModel(
-        factory = app.locationViewModelFactory
-    )
     val context = LocalContext.current
 
     val permissionLauncher =

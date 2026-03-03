@@ -6,10 +6,13 @@ import androidx.annotation.RequiresPermission
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jayden.locationmanager.data.repository.LocationRepo
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
+import javax.inject.Inject
 
-class LocationViewModel(
+@HiltViewModel
+class LocationViewModel @Inject constructor(
     private val repo: LocationRepo
 ) : ViewModel() {
 

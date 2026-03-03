@@ -12,8 +12,9 @@ import com.jayden.locationmanager.model.nmea.typeconverter.TypeConverter.toNmeaE
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class NmeaLogsRepo(
+class NmeaLogsRepo @Inject constructor(
     val dao: NmeaEventDao,
     val listener: AppNmeaLogsListener
 ) {

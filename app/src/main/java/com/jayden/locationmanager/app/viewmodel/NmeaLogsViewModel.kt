@@ -5,9 +5,12 @@ import androidx.annotation.RequiresPermission
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jayden.locationmanager.data.repository.NmeaLogsRepo
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class NmeaLogsViewModel(
+@HiltViewModel
+class NmeaLogsViewModel @Inject constructor(
     private val repo: NmeaLogsRepo
 ) : ViewModel() {
     val pagingFlow = repo.pagingFlow()
