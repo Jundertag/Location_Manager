@@ -20,7 +20,7 @@ import javax.inject.Singleton
 object DataModule {
     @Provides
     @Singleton
-    fun provideCoroutineScope() = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+    fun provideCoroutineScope() = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
     @Provides
     fun provideAppLocationManager(

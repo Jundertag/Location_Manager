@@ -37,10 +37,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.compose.rememberLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.jayden.locationmanager.app.viewmodel.MainViewModel
+import com.jayden.locationmanager.data.model.NmeaMessage
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,5 +51,27 @@ fun NmeaLogsScreen(
     modifier: Modifier = Modifier,
     viewModel: MainViewModel
 ) {
-    TODO("implement NmeaLogsScreen")
+    val context = LocalContext.current
+
+    val permissionLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+
+    }
+
+    val fineLocationGranted by remember {
+        mutableStateOf(ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED)
+    }
+
+
+    val nmeaLogs by viewModel.getNmeaLogs().collectAsStateWithLifecycle(
+        initialValue = NmeaMessage("", 0L)
+    )
+
+    LazyColumn(
+        modifier = Modifier.fillMaxSize()
+    ) {
+
+    }
 }
