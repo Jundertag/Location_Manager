@@ -1,13 +1,8 @@
 package com.jayden.locationmanager.data.di
 
-import android.content.Context
-import com.jayden.locationmanager.data.repo.LocationRepo
-import com.jayden.locationmanager.data.source.AppLocationManager
-import com.jayden.locationmanager.data.source.AppNmeaLogsManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
