@@ -21,14 +21,4 @@ object DataModule {
     @Provides
     @Singleton
     fun provideCoroutineScope() = CoroutineScope(SupervisorJob() + Dispatchers.Main)
-
-    @Provides
-    fun provideAppLocationManager(
-        @ApplicationContext context: Context
-    ): AppLocationManager = AppLocationManager(context)
-
-    @Provides
-    fun provideAppNmeaLogsManager(
-        @ApplicationContext context: Context,
-    ): AppNmeaLogsManager = AppNmeaLogsManager(context)
 }
